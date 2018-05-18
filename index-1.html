@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Basic Canvas Elements</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+<canvas id="scene1" width="500" height="500"></canvas>
+<script type="application/javascript">
+  let canvas = document.getElementById('scene1')
+  let ctx = canvas.getContext('2d')
+  ctx.beginPath()
+  ctx.moveTo(75, 50)
+  ctx.lineTo(100, 75)
+  ctx.lineTo(100, 25)
+  ctx.lineTo(75, 50)
+  ctx.stroke()
+  ctx.closePath()
+
+  ctx.beginPath()
+  ctx.moveTo(300, 100)
+  ctx.lineTo(270, 125)
+  ctx.lineTo(285, 150)
+  ctx.lineTo(315, 150)
+  ctx.lineTo(330, 125)
+  ctx.lineTo(300, 100)
+  ctx.fillStyle = '#FFD323'
+  ctx.fill()
+  ctx.closePath()
+
+  ctx.beginPath()
+  ctx.moveTo(200, 200)
+  ctx.lineTo(300, 300)
+  ctx.lineWidth = 5
+  ctx.strokeStyle = '#25FFEB'
+  ctx.stroke()
+  ctx.closePath()
+
+  ctx.beginPath()
+  ctx.arc(100, 300, 25, 0, 360)
+  ctx.lineWidth = 3
+  ctx.strokeStyle = '#FFDAB5'
+  ctx.stroke()
+</script>
+<canvas id="scene2" width="500" height="500"></canvas>
+<script type="application/javascript">
+  let canvas1 = document.getElementById('scene2')
+  let ctx1 = canvas1.getContext('2d')
+  var colors = ['#FFD323', '#25FFEB', '#FFDAB5']
+  var stopped = false
+  ctx1.translate(200, 200)
+
+  var triangle = {
+    p1: { x: 100, y: 100 }, p2: { x: 100, y: 150 }, p3: { x: 140, y: 125 }, draw: function () {
+      ctx1.save()
+      ctx1.beginPath()
+      ctx1.moveTo(this.p1.x, this.p1.y)
+      ctx1.lineTo(this.p2.x, this.p2.y)
+      ctx1.lineTo(this.p3.x, this.p3.y)
+      ctx1.lineTo(this.p1.x, this.p1.y)
+      ctx1.fillStyle = colors[Math.floor(Math.random() * colors.length)]
+      ctx1.fill()
+      ctx1.closePath()
+      ctx1.beginPath()
+      ctx1.arc(0, 0, 1, 0, 360)
+      ctx1.fillStyle = '#000'
+      ctx1.fill()
+      ctx1.closePath()
+      ctx1.restore()
+    }
+  }
+
+  function Draw () {
+    ctx1.clearRect(0, 0, canvas1.width, canvas1.height)
+    ctx1.rotate(Math.PI / 36)
+    triangle.draw()
+    raf = window.requestAnimationFrame(Draw)
+  }
+
+  function start () {
+    raf = window.requestAnimationFrame(Draw)
+    stopped = false
+  }
+
+  function stop () {
+    window.cancelAnimationFrame(raf)
+    stopped = true
+  }
+
+  canvas1.addEventListener('click', function (e) {
+    stopped ? start() : stop()
+  }, false)
+
+  Draw()
+</script>
+</body>
+</html>
